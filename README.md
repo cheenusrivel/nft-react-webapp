@@ -12,7 +12,9 @@
 * Create a full stack WebApp by connecting smart contract to the React frontend using Metamask and Web3 tools
 * A frontend UI where can user input a NRIC number, link to your digital asset, it will do following to mint NFT
     * Connect to Metamask via frontend webapp
-    * Call smart contract methods from frontend
+    * Send NRIC and Wallet Address to GO API, store it in DB and produce Receipt based on request body hashing
+    * Call smart contract methods from frontend with start date, end date, wallet address, receipt value and tokeURI based on NFT metadata (name, image and   
+      description)
     * Sign transactions using Metamask
     
 <h2> Config </h2>
