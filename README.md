@@ -1,4 +1,4 @@
-# 🗃 Mint NFT Smart Contract
+# 🗃 nft-react-webapp - Mint your NFT
 
 * React app with any preferred React framework can be used
 * Web3 integration with web3.js or ether.js
