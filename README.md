@@ -13,8 +13,7 @@
 * A frontend UI where can user input a NRIC number, link to your digital asset, it will do following to mint NFT
     * Connect to Metamask via frontend webapp
     * Send NRIC and Wallet Address to GO API, store it in DB and produce Receipt based on request body hashing
-    * Call smart contract methods from frontend with start date, end date, wallet address, receipt value and tokeURI based on NFT metadata (name, image and   
-      description)
+    * Call smart contract methods from frontend with start date, end date, wallet address, receipt value and tokeURI which based on NFT metadata (name, image and     description)
     * Sign transactions using Metamask
     
 <h2> Config </h2>
