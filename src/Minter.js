@@ -62,6 +62,7 @@ const Minter = (props) => {
       })
       .catch((err) => {
         console.log(err.message);
+        alert("Receipt not available, No Minting possible!!!")
       });  
   };
 
