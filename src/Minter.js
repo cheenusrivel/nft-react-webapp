@@ -5,12 +5,9 @@ const Minter = (props) => {
 
   //State variables
   const [nric, setNric] = useState("");
-  const [walletAddress, setWallet] = useState("");
-  const [receipt, setReceipt] = useState("");
-  const [status, setStatus] = useState("");
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
   const [url, setURL] = useState("");
+  const [walletAddress, setWallet] = useState("");
+  const [status, setStatus] = useState("");
   const [imageurl, setImageURL] = useState("");
  
   useEffect(async () => { 
@@ -28,42 +25,57 @@ const Minter = (props) => {
   };
 
   const onMintPressed = async () => { 
+    //No Status
+    setStatus("🦊 Minting NFT's...");
+
+    // error handling
+    if (nric.trim() == "" || (url.trim() == "" )) {  
+      console.log("NRIC or URL is missing");
+        setStatus("❗Please make sure all fields are completed before minting.");    
+        return;
+    }  else if (!/^[A-Z]{1}[0-9]{7}[A-Z]{1}$/.test(nric))   {
+      setStatus("❗Please Enter Correct NRIC, e.g NXXXXXXXD.");
+      setNric('');
+      return;
+    } else if (!/^(ftp|http|https):\/\/[^ "]+$/.test(url)) {
+      setStatus("❗Please Enter correct URL.");
+      setURL('');
+      return;
+    }
+
     console.log("OnMintPressed, NRIC: " + nric);
     console.log("OnMintPressed, Wallet Address: " + walletAddress);
+    console.log("OnMintPressed, Fetching Receipt from api");
 
+    const name = nric + "_nft";
+    const description = "NFT for " + nric;
        //Get Receipt
     await fetch('http://localhost:8080/', {
-      method: 'POST',
-      body: JSON.stringify({
-        nric: nric,
-        walletaddress: walletAddress
-      }),
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-      })
-      .then((response) => response.json())
-      .then(async (data) => {
-        console.log("OnMintPressed, response data: " + data);
-        
-        setReceipt(data);
-        setName(nric + "_NFT");
-        setDescription("User " + nric + " NFT")
-
-        console.log("OnMintPressed, url: " + url);     
-        console.log("OnMintPressed, name: " + name);     
-        console.log("OnMintPressed, description: " + description);  
-
-        //  Mint NFT
-        const { status, imageurl } = await mintNFT(url, name, description, receipt);
-        setStatus(status);
-        setImageURL(imageurl);
-
-      })
-      .catch((err) => {
-        console.log(err.message);
-        alert("Receipt not available, No Minting possible!!!")
-      });  
+    method: 'POST',
+    body: JSON.stringify({
+      nric: nric,
+      walletaddress: walletAddress
+    }),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+    })
+    .then((response) => response.json())
+    .then(async (receipt) => {          
+      console.log("onMintPressed , URL: " + url);
+      console.log("onMintPressed , Name: " + name);
+      console.log("onMintPressed , Decription: " + description);
+      console.log("onMintPressed , Receipt: " + receipt);
+      //  Mint NFT
+      const { status, imageurl } = await mintNFT(url, name, description, receipt);
+      setStatus(status);
+      setImageURL(imageurl);
+    })
+    .catch((err) => {
+      console.log(err.message);
+      setStatus("❗Receipt not available, No Minting possible!!!");
+      setImageURL('');
+    });  
   };
 
   function addWalletListener() {
@@ -107,13 +119,13 @@ const Minter = (props) => {
       <br></br>
       <h1 id="title">🧙‍♂️ Mint your NFT</h1>
       <p>
-        Please add your NRIC, then press "Mint."
+        Please add your NRIC and Link to asset, then press "Mint."
       </p>
       <form>
       <h2>🤔 NRIC: </h2>
         <input
           type="text"
-          placeholder="e.g. NXXXXXXXXX!"
+          placeholder="e.g. NXXXXXXXD"
           onChange={(event) => setNric(event.target.value)}
         />
         <h2>🖼 Link to asset: </h2>
@@ -132,7 +144,6 @@ const Minter = (props) => {
       <div>
       <img
         src={imageurl}
-        alt="car"
       />
       </div>
     </div>    

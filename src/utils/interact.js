@@ -126,7 +126,6 @@ export const connectWallet = async () => {
         to: contractAddress,
         from: window.ethereum.selectedAddress,
         'data': window.contract.methods.mint(window.ethereum.selectedAddress, startDateInSecs, EndDateInSecs, receipt, tokenURI).encodeABI() //make call to NFT smart contract
-        //'data': window.contract.methods.mintNFT(window.ethereum.selectedAddress, tokenURI).encodeABI() //make call to NFT smart contract
     };
 
     //sign the transaction via Metamask
